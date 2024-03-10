@@ -1,19 +1,22 @@
-import { view, game } from './quiz.js';
+import { view, game }from '../src/quiz.js' ;
+import questions from './question.js';
 
-const url = './src/questions.json';
 
-fetch(url)
-  .then(res => res.json())
-  .then(questionsArray => {
-    const quiz = questionsArray.map(question => ({
-      question: `What is ${question.name}'s real name?`,
-      options: [question.realName], // Adjust options based on your requirements
-      answer: question.realName
+const quiz = questions.map(question => ({
+      question: question.question,
+      options: question.options, // Adjust options based on your requirements
+      answer: question.answer
     }));
 
-    view.start.addEventListener('click', () => game.start(quiz), false);
-    view.response.addEventListener('click', (event) => game.check(event), false);
-  })
-  .catch(error => {
-    console.error('Error loading quiz:', error);
-  });
+
+    view.start.addEventListener('click', () => game.start(quiz), true);
+    view.response.addEventListener('click', (event) => game.check(event), true);
+
+// fetch(url)
+//   .then(res => res.json())
+//   .then(questionsArray => {
+
+//   })
+//   .catch(error => {
+//     console.error('Error loading quiz:', error);
+//   });

@@ -1,13 +1,13 @@
 import { random, shuffle } from "./utilities.js";
 const view = {
-  score: document.querySelector("#score strong"),
+  score: document.querySelector("#score"),
   question: document.querySelector("#question"),
   result: document.querySelector("#result"),
   info: document.querySelector("#info"),
   start: document.querySelector("#start"),
   response: document.querySelector("#response"),
-  timer: document.querySelector("#timer strong"),
-  hiScore: document.querySelector("#hiScore strong"),
+  timer: document.querySelector("#timer"),
+  hiScore: document.querySelector("#hiScore"),
   render(target, content, attributes) {
     for (const key in attributes) {
       target.setAttribute(key, attributes[key]);
@@ -42,7 +42,7 @@ const view = {
 };
 const game = {
   start(quiz) {
-    console.log("start() invoked");
+    console.log("start() invoked", quiz);
     this.score = 0;
     this.questions = [...quiz];
     view.setup();
@@ -57,18 +57,15 @@ const game = {
       game.gameOver();
     }
   },
-  ask(name) {
+  ask() {
     console.log("ask() invoked");
     if (this.questions.length > 2) {
       shuffle(this.questions);
       this.question = this.questions.pop();
-      const options = [
-        this.questions[0].realName,
-        this.questions[1].realName,
-        this.question.realName,
-      ];
+      const options = this.question.options;
+      console.log(options,"options");
       shuffle(options);
-      const question = `What is ${this.question.name}'s real name?`;
+      const question = this.question.question;
       view.render(view.question, question);
       view.render(view.response, view.buttons(options));
     } else {
@@ -78,7 +75,7 @@ const game = {
   check(event) {
     console.log("check(event) invoked");
     const response = event.target.textContent;
-    const answer = this.question.realName;
+    const answer = this.question.answer;
     if (response === answer) {
       console.log("correct");
       view.render(view.result, "Correct!", { class: "correct" });
